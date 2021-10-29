@@ -1,0 +1,91 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %}
+<!-- {% block style %}./static/style_home.css{% endblock %} -->
+{% block content %}
+<!-- <h1 align="center">Notes</h1>
+<ul class="list-group list-group-flush" id="notes">
+  {% for note in user.notes %}
+  <li class="list-group-item">
+    {{ note.data }}
+    <button type="button" class="close" onClick="deleteNote({{ note.id }})">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </li>
+  {% endfor %}
+</ul>
+<form method="POST">
+  <textarea name="note" id="note" class="form-control"></textarea>
+  <br />
+  <div align="center">
+    <button type="submit" class="btn btn-primary">Add Note</button>
+  </div>
+</form> -->
+
+<div class="container-fluid">
+  <div class="d-flex" id="wrapper">
+    <!-- Sidebar-->
+    <div class="border-end bg-white" id="sidebar-wrapper">
+      <div class="sidebar-heading border-bottom bg-light your_note">Your Notes</div>
+      <div class="list-group list-group-flush">
+        {% for note in user.notes|reverse %}
+          <div class="list-group-item list-group-item-action list-group-item-light p-3 cs-df " onClick="showNote_tab({{note.id}},`{{note.title|string}}`,`{{note.data|string|replace('\n',br)}}`)">
+            <i class="fas fa-sticky-note icon note-icon"></i>
+            {% if note.data|length > 0 %}
+              {% if note.title|length > 15 %}
+                  {{note.title[:15] + '...'}}
+              {% else %}
+                  {{note.title}}    
+              {% endif %}
+            {% endif %}
+            <button type="button" class="close" onClick="deleteItem(this,'note',{{ note.id }})">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="list-group list-group-flush">
+        {% for todo in user.todos|reverse %}
+          {% set datas=[] %}
+          {% set ids=[] %}
+          {% set dones=[] %}
+          {% for task in todo.tasks %}
+              {{ datas.append(task.data) or ""}}
+              {{ ids.append(task.id) or ""}}
+              {{ dones.append(task.finish) or ""}}
+          {% endfor %}
+          <div id="todo_{{todo.id}}" class="list-group-item list-group-item-action list-group-item-light p-3 cs-df " onClick='showTodo_tab({{todo.id}},`{{todo.title|string}}`,{{datas|tojson}},{{ids|tojson}},dones={{dones|tojson}});'>
+            <i class="fas fa-list-alt icon todo-icon"></i>
+            {% if todo.title|length > 15 %}
+              {{todo.title[:15] + ' . . .'}}
+            {% else %}
+              {{todo.title}}
+            {% endif %}
+            <button type="button" class="close" onClick="deleteItem(this,'todo',{{ todo.id }})">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <!-- Page content wrapper-->
+    <div id="page-content-wrapper">
+        <!-- Top navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+            <div class="container-fluid">
+                <button class="btn btn-primary btn-sm" id="sidebarToggle">Notes List</button>
+                <button class="btn btn-primary btn-sm" id="newNote" onClick="createNote_tab()">New Note</button>
+                <button class="btn btn-primary btn-sm" id="newTodo" onClick="createTodo_tab()">New Check-list</button>
+            </div>
+        </nav>
+        <!-- Page content-->
+        <div class="container-fluid overflow-hidden body-main-wraper">
+          <div class="body-main-js col-8 mg-auto mt-48 body-main verflow-hidden">
+            <div class="body-content">
+              <p align="center">Select or create Note/Check-list to display</p>
+              <p align="center">(*☻-☻*)</p>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href = "../static/logo-icon.png" rel="icon" type="image/gif">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='style_home.css') }}"/> -->
+    <!-- <link rel="stylesheet" href="{% block style %}{% endblock %}"/> -->
+    <title>{% block title %}Home{% endblock %}</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark position-relative">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbar"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-between" id="navbar">
+        {% if user.is_authenticated %}
+        <div class="navbar-nav">
+          <a class="nav-item nav-link" id="home" href="/">Home</a>
+        </div>
+        <div class="navbar-nav">
+          <div class="nav-item dropdown ">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              {{user.first_name}}
+            </a>
+            <div class="dropdown-menu rg-0" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" id="logout" href="/logout">Logout</a>
+            </div>
+          </div>
+        </div>
+        <!-- <a class="nav-item nav-link" id="logout" href="/logout">Logout</a> -->
+        {% else %}
+        <div class="navbar-nav">
+          <a class="nav-item nav-link" id="login" href="/login">Login</a>
+          <a class="nav-item nav-link" id="signUp" href="/sign-up">Sign Up</a>
+        </div>
+        {% endif %}
+      </div>
+      <div class="navbar-logo al-center position-absolute">
+        <a class="navbar-brand" href="/">
+          <img src="../static/logo.png" width="136" height="34" alt="">
+        </a>
+      </div>
+    </nav>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %} {% if category ==
+        'error' %}
+    <div class="alert alert-danger alter-dismissable fade show" role="alert">
+      {{ message }}
+      <button type="button" class="close" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% else %}
+    <div class="alert alert-success alter-dismissable fade show" role="alert">
+      {{ message }}
+      <button type="button" class="close" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endif %} {% endfor %} {% endif %} {% endwith %}
+
+    <div class="container-fluid">{% block content %} {% endblock %}</div>
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', filename='index.js') }}"
+    ></script>
+  </body>
+</html>
